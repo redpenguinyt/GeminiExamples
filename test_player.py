@@ -7,12 +7,11 @@ player.input = Input() # attach an input class to the player
 
 def move_player():
 	input = player.input.get_key_press()
-	if input in ["w","a","s","d"]:
-		collided = player.move(player.input.direction_keys[input])
-		if collided == 0:
-			player.next_frame()
-	else:
+	if input not in ["w", "a", "s", "d"]:
 		return input
+	collided = player.move(player.input.direction_keys[input])
+	if collided == 0:
+		player.next_frame()
 
 # -- Scene 0 -- #
 scene0_image = """██████████████████
@@ -99,16 +98,24 @@ def scene3():
 					text.image = text.image[1:]
 				else:
 					text.move((-1,0), collide=False)
-			if i==0:   texts.append(Sprite((17,0), "Ты почти дошел", parent=scene3))
-			if i==25:  texts.append(Sprite((17,0), "еще чуть чуть", parent=scene3))
-			if i==50:  texts.append(Sprite((17,0), "Совсем немного", parent=scene3))
-			if i==75:  texts.append(Sprite((17,0), "Как дела?", parent=scene3))
-			if i==100: texts.append(Sprite((17,0), "У меня хорошо, я текст,", parent=scene3))
-			if i==124: texts.append(Sprite((17,0), "и могу сидеть здесь", parent=scene3))
-			if i==144: texts.append(Sprite((17,0), "сколько хочу", parent=scene3))
-			if i==200: texts.append(Sprite((17,0), "Ладно, иди дальше", parent=scene3))
-			if i==220: break
-
+			if i == 0:
+				texts.append(Sprite((17,0), "Ты почти дошел", parent=scene3))
+			elif i == 100:
+				texts.append(Sprite((17,0), "У меня хорошо, я текст,", parent=scene3))
+			elif i == 124:
+				texts.append(Sprite((17,0), "и могу сидеть здесь", parent=scene3))
+			elif i == 144:
+				texts.append(Sprite((17,0), "сколько хочу", parent=scene3))
+			elif i == 200:
+				texts.append(Sprite((17,0), "Ладно, иди дальше", parent=scene3))
+			elif i == 220:
+				break
+			elif i == 25:
+				texts.append(Sprite((17,0), "еще чуть чуть", parent=scene3))
+			elif i == 50:
+				texts.append(Sprite((17,0), "Совсем немного", parent=scene3))
+			elif i == 75:
+				texts.append(Sprite((17,0), "Как дела?", parent=scene3))
 	while True:
 		move_player()
 		if player.pos == (17,2): break
@@ -140,9 +147,7 @@ def scene4():
 	scene4.add_to_scene(player)
 	player.pos = (0,2)
 
-	while True:
-		if move_player() == " ":
-			break
+	while move_player() != " ":
 		if scene4.get_entities_at(player.pos, layers=[1]):
 			scene4.add_to_scene(Entity(player.pos, (1,1), fill_char=" ", layer=-1))
 

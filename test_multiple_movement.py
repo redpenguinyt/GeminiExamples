@@ -26,11 +26,7 @@ while True:
 	if i % 32 == 0:
 		block5.move(1,0)
 
-		looped = True
-		for child in scene.children:
-			if child.pos[0] != 0:
-				looped = False
-
+		looped = all(child.pos[0] == 0 for child in scene.children)
 		if looped:
 			scene.render()
 			sleep(5)
