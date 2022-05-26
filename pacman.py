@@ -70,7 +70,7 @@ def collect_dots():
 		removed_dot.parent = None
 		del removed_dot
 
-		if len(list(filter(lambda x: x.layer == 5, scene.children))) == 0:
+		if not list(filter(lambda x: x.layer == 5, scene.children)):
 			return 1
 
 # Pathfinding
