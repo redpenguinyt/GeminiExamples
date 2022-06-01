@@ -1,4 +1,4 @@
-from gemini import Scene, Entity, Sprite, AnimatedSprite, Input, txtcolours as tc
+from gemini import Scene, Entity, Sprite, AnimatedSprite, Input, txtcolours as tc, Vec2D
 
 age = "49"
 

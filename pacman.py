@@ -111,7 +111,7 @@ def move_ghosts():
 		else:
 			ghost.colour = ghost_colours[i]
 		if random.randint(0,10) > 3:
-			directions = [get_smell_at(add_pos(ghost.pos,dir,limits=scene.size)) for dir in [(1,0),(-1,0),(0,1),(0,-1)]]
+			directions = [get_smell_at(add_pos(ghost.pos,dir,limits=scene.size)) for dir in Input.direction_keys.values()]
 			directions = list(filter(lambda x: x is not None, directions))
 			direction = sorted(directions, key=lambda x: x.smell, reverse=ghosts_scared==0)[0]
 			ghost.move((add_pos(direction.pos, ghost.pos, int.__sub__)))
@@ -123,16 +123,8 @@ while not game_over:
 	scene.render()
 	print(f"Dots left: {total_pac_dots}")
 	input = Input().pressed_key # Wait for next key press, then move player, then render
-	if input in ["w","a","s","d","up_arrow","down_arrow","left_arrow","right_arrow"]:
-		match input:
-			case "w"|"up_arrow":
-				try_set_direction((0,-1))
-			case "a"|"left_arrow":
-				try_set_direction((-1,0))
-			case "s"|"down_arrow":
-				try_set_direction((0,1))
-			case "d"|"right_arrow":
-				try_set_direction((1,0))
+	if input in Input.direction_keys:
+		try_set_direction(Input.direction_keys[input])
 	elif input == " ":
 		break
 

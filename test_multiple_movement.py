@@ -1,5 +1,4 @@
-from gemini import Scene, Entity, sleep
-import threading
+from gemini import Scene, Entity, sleep, main_scene
 
 scene = Scene((50,12), is_main_scene=True)
 block0 = Entity((0,0),(4,2))
