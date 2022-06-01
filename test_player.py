@@ -1,6 +1,6 @@
 from gemini import Scene, Entity, Sprite, AnimatedSprite, Input, txtcolours as tc
 
-age = "46"
+age = "49"
 
 player = AnimatedSprite((1,1),['▇','▆','▇','█'], colour=tc.RED, auto_render=True, layer=-20, collisions=[0,-5])
 player.input = Input() # attach an input class to the player
