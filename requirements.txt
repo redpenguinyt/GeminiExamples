@@ -1,1 +1,1 @@
-gemini-engine>=1.0.5
+gemini-engine>=1.0.6

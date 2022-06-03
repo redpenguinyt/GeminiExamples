@@ -14,7 +14,8 @@ def move_player():
 		player.next_frame()
 
 # -- Scene 0 -- #
-scene0_image = """██████████████████
+scene0_image = """
+██████████████████
 █ █              █
 █   █ █ ███ ████ █
 ███   █ █   █  █ █
@@ -37,7 +38,8 @@ def scene0():
 		if player.pos == (17,10): break
 
 # -- Scene 1 -- #
-scene1_image = """██████████████████
+scene1_image = """
+██████████████████
 █                █
 █  Сегодня твой  █
 
@@ -54,7 +56,8 @@ def scene1():
 		if player.pos == (17,3): break
 
 # -- Scene 2 -- #
-scene2_image = """██████████████████
+scene2_image = """
+██████████████████
 █                █
       так что
 █                █
@@ -75,7 +78,7 @@ scene3_image = """
 ██████████████████"""
 def scene3():
 	scene3 = Scene((40,4),clear_char=" ", children=[
-		Sprite((0,0),scene3_image),
+		Sprite((0,1),scene3_image),
 		Entity((18,0),(22,4), fill_char="ㅤ", layer=-5)
 	])
 	scene3.add_to_scene(player)
@@ -121,7 +124,8 @@ def scene3():
 		if player.pos == (17,2): break
 
 # -- Scene 4 -- #
-scene4_image = """██████████████████████████████
+scene4_image = """
+██████████████████████████████
 █                            █
       с днем рождения!       █
 █                            █

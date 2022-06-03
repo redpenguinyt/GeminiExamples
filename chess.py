@@ -1,4 +1,4 @@
-from gemini import Scene, Sprite, txtcolours as tc, add_pos
+from gemini import Scene, Sprite, txtcolours as tc
 
 # (1,-2) is bottom left
 # (-2,-2) is bottom right)
@@ -18,7 +18,7 @@ class ChessPiece(Sprite):
 		self.is_white = is_white
 		self.label = label
 
-		super().__init__(pos,image,True,None,False,0,colour,[-1],False,[],[0])
+		super().__init__(pos,image, colour=colour, layer=0,collisions=[-1])
 	def __str__(self):
 		return f"{self.label} at {self.pos}"
 
@@ -47,7 +47,7 @@ class Rook(ChessPiece):
 
 		if pos[0] > 0:
 			for x in range(1,pos[0]):
-				if self.parent.is_entity_at(add_pos(self.pos, (x,0))):
+				if self.parent.is_entity_at(self.pos + (x,0)):
 					return 1
 		elif pos[1] > 0:
 			pass
@@ -60,6 +60,8 @@ rook.move((7,-2))
 is_white_turn = False
 while True:
 	is_white_turn = not is_white_turn
+	for c in board.children:
+		print(c.layer, type(c.layer))
 	board.render()
 	print("White turn" if is_white_turn else "Black turn")
 
@@ -72,5 +74,5 @@ while True:
 
 	new_pos = (0,0)
 
-	while piece.move(add_pos(piece.pos, new_pos)) == 1:
+	while piece.move(piece.pos + new_pos) == 1:
 		new_pos = tuple = eval(input(f"Where do you want the {piece.label} to go (1-8): e.g. 3,8 or 4,2 "))

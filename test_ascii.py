@@ -17,7 +17,7 @@ while True:
 		for _ in range(4):
 			bob.move(direction[0],direction[1])
 			car.move(1,0)
-			scene1.render()
-			scene2.render()
+			scene1.render(show_coord_numbers=True)
+			scene2.render(show_coord_numbers=True)
 			sleep(.1)
 		bob.next_frame()

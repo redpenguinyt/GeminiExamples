@@ -1,4 +1,4 @@
-from gemini import Scene, Entity, Sprite, AnimatedSprite, Input, txtcolours as tc, sleep, add_pos
+from gemini import Scene, Entity, Sprite, AnimatedSprite, Input, txtcolours as tc, sleep, correct_position
 import random
 
 USE_POWERUPS = False
@@ -32,14 +32,14 @@ smell_board = [
 def try_set_direction(new_direction):
 	global last_direction
 	last_direction = new_direction
-	if not scene.is_entity_at(add_pos(pacman.pos, new_direction)):
+	if not scene.is_entity_at(pacman.pos + new_direction):
 		global direction
 		direction = new_direction
 
 # Setup
 
 scene = Scene((17,19),clear_char=" ",is_main_scene=True)
-walls = Sprite((0,-1),image=pacman_board, colour=tc.BLUE, layer=3)
+walls = Sprite((0,0),image=pacman_board, colour=tc.BLUE, layer=3)
 pacman = AnimatedSprite((8,13), ['O','ᗤ','Ↄ','ᗤ'], colour=tc.YELLOW, collisions=[3], layer=1)
 pacman.move_functions.append(pacman.next_frame)
 last_direction = (0,0)
@@ -111,10 +111,10 @@ def move_ghosts():
 		else:
 			ghost.colour = ghost_colours[i]
 		if random.randint(0,10) > 3:
-			directions = [get_smell_at(add_pos(ghost.pos,dir,limits=scene.size)) for dir in Input.direction_keys.values()]
+			directions = [get_smell_at(correct_position(ghost.pos+dir,scene.size)) for dir in Input.direction_keys.values()]
 			directions = list(filter(lambda x: x is not None, directions))
 			direction = sorted(directions, key=lambda x: x.smell, reverse=ghosts_scared==0)[0]
-			ghost.move((add_pos(direction.pos, ghost.pos, int.__sub__)))
+			ghost.move(direction.pos - ghost.pos)
 
 gametime = 0
 game_over = False
@@ -123,7 +123,7 @@ while not game_over:
 	scene.render()
 	print(f"Dots left: {total_pac_dots}")
 	input = Input().pressed_key # Wait for next key press, then move player, then render
-	if input in Input.direction_keys:
+	if input in Input.direction_keys.all_keys():
 		try_set_direction(Input.direction_keys[input])
 	elif input == " ":
 		break
@@ -135,7 +135,7 @@ while not game_over:
 		game_over = True
 	move_ghosts()
 
-	if not scene.is_entity_at(add_pos(pacman.pos, last_direction), pacman.collisions):
+	if not scene.is_entity_at(pacman.pos+ last_direction, pacman.collisions):
 		direction = last_direction
 	if pacman.move(direction) == 1:
 		direction = (0,0)

@@ -1,4 +1,4 @@
-from gemini import Scene, Entity, sleep, add_pos, txtcolours as tc, Input
+from gemini import Scene, Entity, sleep, txtcolours as tc, Input, Vec2D
 import math
 
 colours = tc.ALL_COLOURS
@@ -14,5 +14,5 @@ while True:
 		break
 	i += 0.05*math.pi
 	# new_brick = Entity(brick.pos, (2,1), colour=colours[int(i%len(colours))])
-	brick.pos = add_pos((14,7), (round(10*math.cos(i)), round(5*math.sin(i))))
+	brick.pos = Vec2D(14,7) + Vec2D(round(10*math.cos(i)), round(5*math.sin(i)))
 	scene.render()

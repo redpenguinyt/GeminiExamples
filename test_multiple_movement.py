@@ -11,7 +11,7 @@ block5 = Entity((0,10),(4,2))
 i = 0
 while True:
 	i += 1
-	scene.render()
+	scene.render(show_coord_numbers=True)
 	sleep(.1)
 	block0.move(1,0)
 	if i % 2 == 0:
