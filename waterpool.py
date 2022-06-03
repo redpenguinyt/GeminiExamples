@@ -68,6 +68,5 @@ while True:
 	if times_since_placed > TERRAIN_WIDTH:
 		break
 
-scene.render(layers=[1])
-scene.render()
+scene.render(show_coord_numbers=True)
 print(f"There are {water_count}cm^2 of water (1cm^2 is a single character)")

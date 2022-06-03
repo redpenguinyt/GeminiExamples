@@ -122,11 +122,11 @@ while not game_over:
 	gametime += 1
 	scene.render()
 	print(f"Dots left: {total_pac_dots}")
-	input = Input().pressed_key # Wait for next key press, then move player, then render
-	if input in Input.direction_keys.all_keys():
-		try_set_direction(Input.direction_keys[input])
-	elif input == " ":
-		break
+	user_input = Input().pressed_key # Wait for next key press, then move player, then render
+	if user_input in Input.direction_keys.all_keys():
+		try_set_direction(Input.direction_keys[user_input])
+	elif user_input == " ":
+		game_over = True
 
 	get_smell_at(pacman.pos).smell = 0
 	if collect_dots() == 1:
