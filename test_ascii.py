@@ -17,7 +17,13 @@ while True:
 		for _ in range(4):
 			bob.move(direction[0],direction[1])
 			car.move(1,0)
-			scene1.render(show_coord_numbers=True)
-			scene2.render(show_coord_numbers=True)
+			r1 = scene1.render(is_display=False, show_coord_numbers=True)
+			r2 = scene2.render(is_display=False, show_coord_numbers=True)
+
+			# Scene.render can be a complex process, so when it comes to rendering multiple scenes at once, you should 'bake' them as shown above then render them with Scene._render_stage.
+
+			print(scene1._render_stage(r1))
+			print(scene2._render_stage(r2))
+
 			sleep(.1)
 		bob.next_frame()
