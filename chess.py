@@ -1,4 +1,4 @@
-from gemini import Scene, Sprite, txtcolours as tc
+from gemini import Scene, Sprite, txtcolours as tc, Vec2D
 
 # (1,-2) is bottom left
 # (-2,-2) is bottom right)
@@ -25,8 +25,8 @@ class ChessPiece(Sprite):
 	def _move(self, pos: tuple, normalised: tuple, simplified: tuple):
 		return 1 # This is for the chess piece to decide
 
-	def move(self, pos: tuple):
-		normalised = tuple([i-abs(i) for i in pos])
+	def move(self, pos: Vec2D):
+		normalised = tuple(i-abs(i) for i in pos)
 		simplified = tuple(abs(i)-min(map(int.__abs__, pos)) for i in pos)
 		print(normalised)
 		print(simplified)
@@ -49,9 +49,7 @@ class Rook(ChessPiece):
 			for x in range(1,pos[0]):
 				if self.parent.is_entity_at(self.pos + (x,0)):
 					return 1
-		elif pos[1] > 0:
-			pass
-		else: return 1
+		elif pos[1] <= 0: return 1
 
 rook = Rook((1,-2), True)
 print(rook.move_rules)
@@ -67,7 +65,7 @@ while True:
 
 	pieces: list[ChessPiece] = []
 
-	while len(pieces) < 1:
+	while not pieces:
 		get_piece: tuple = eval(input("Give the position of the chess piece you want to control (1-8): e.g. 3,8 or 4,2 "))
 		pieces = board.get_entities_at(get_piece, 0)
 	piece = pieces[0]

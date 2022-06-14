@@ -76,14 +76,14 @@ def collect_dots():
 # Pathfinding
 
 def get_smell_at(pos):
-	result = scene.get_entities_at(pos, 10)
+	result = scene.get_entities_at(pos, layers=[10])
 	if len(result) > 0:
 		return result[0]
 
 smell_points = []
 
 for pos, smell in smell_board:
-	pac_smell = Sprite(pos, ' ', layer=10)
+	pac_smell = Entity(pos, (1,1), layer=10, hidden=True)
 	smell_points.append(pac_smell)
 	pac_smell.smell = smell
 
