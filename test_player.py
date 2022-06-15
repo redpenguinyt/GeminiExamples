@@ -1,15 +1,20 @@
-from gemini import Scene, Entity, Sprite, AnimatedSprite, Input, txtcolours as tc, Vec2D
+from gemini import Scene, Entity, Sprite, AnimatedSprite, Input, txtcolours as tc, Vec2D, Camera
 
 age = "49"
 
-player = AnimatedSprite((1,1),['▇','▆','▇','█'], colour=tc.RED, auto_render=True, layer=-20, collisions=[0,-5])
+player = AnimatedSprite((1,1),['▇','▆','▇','█'], colour=tc.RED, layer=-20, collisions=[0,-5])
 player.input = Input() # attach an input class to the player
 
+def new_camera(scene):
+	camera = Camera((0,0), (10,5), focus_object=player, scene=scene)
+	player.move_functions = [camera.render]
+	return camera
+
 def move_player():
-	input = player.input.get_key_press()
-	if input not in ["w", "a", "s", "d"]:
-		return input
-	collided = player.move(player.input.direction_keys[input])
+	event = player.input.get_key_press()
+	if event not in ["w", "a", "s", "d"]:
+		return event
+	collided = player.move(player.input.direction_keys[event])
 	if collided == 0:
 		player.next_frame()
 
@@ -32,7 +37,9 @@ scene0_image = """
 def scene0():
 	scene0 = Scene((18, 14),clear_char=" ",children=[Sprite((0,0),scene0_image)])
 	scene0.add_to_scene(player)
+	new_camera(scene0)
 
+	scene0.render()
 	while True:
 		move_player()
 		if player.pos == (17,10): break
@@ -49,6 +56,7 @@ scene1_image = """
 def scene1():
 	scene1 = Scene((18,7),clear_char=" ", children=[Sprite((0,0),scene1_image)])
 	scene1.add_to_scene(player)
+	new_camera(scene1)
 	player.pos = (0,3)
 
 	while True:
@@ -65,6 +73,7 @@ scene2_image = """
 def scene2():
 	scene2 = Scene((18,5),clear_char=" ", children=[Sprite((0,0),scene2_image)])
 	scene2.add_to_scene(player)
+	new_camera(scene2)
 	player.pos = (0,2)
 
 	while True:
@@ -78,10 +87,10 @@ scene3_image = """
 ██████████████████"""
 def scene3():
 	scene3 = Scene((40,4),clear_char=" ", children=[
-		Sprite((0,1),scene3_image),
-		Entity((18,0),(22,4), fill_char="ㅤ", layer=-5)
+		Sprite((0,1),scene3_image)
 	])
 	scene3.add_to_scene(player)
+	camera = new_camera(scene3)
 	player.pos = (0,2)
 
 	while True:
@@ -94,7 +103,7 @@ def scene3():
 		if player.input.get_key_press() == "d":
 			i += 1
 			player.next_frame()
-			scene3.render()
+			camera.render()
 
 			for text in texts:
 				if text.pos == (0,0):
@@ -138,17 +147,20 @@ scene4_image = """
 █                            █
 █                            █
 ██████████████████████████████"""
-cake = f"""
+cake = """
      {age[0]} {age[1]}
      | |
-/----------\\
+/----------\
 |----------|
 |vegan cake|
 |__________|
-\__________/"""
+\__________/""".format(age=age)
 def scene4():
-	scene4 = Scene((30,13),clear_char=" ", children=[Sprite((0,0),scene4_image), Sprite((9,3),cake, layer=1)])
+	scene4 = Scene((30,13), clear_char=" ", children=[
+		Sprite((0,0), scene4_image), Sprite((9,3), cake, layer=1)
+	])
 	scene4.add_to_scene(player)
+	new_camera(scene4)
 	player.pos = (0,2)
 
 	while move_player() != " ":

@@ -91,7 +91,7 @@ for pos, smell in smell_board:
 
 ghost_colours = [tc.RED, tc.YELLOW, tc.CYAN, tc.GREEN]
 ghosts = [
-	Sprite((8,7), 'ᗣ', colour=colour, layer=4, collisions=[3]) for colour in ghost_colours
+	Sprite((8,7), 'ᗣ', colour=colour, layer=4) for colour in ghost_colours
 ]
 for i, g in enumerate(ghosts): g.wait_time = (i+1)*20
 ghosts_scared = 0
@@ -111,10 +111,13 @@ def move_ghosts():
 		else:
 			ghost.colour = ghost_colours[i]
 		if random.randint(0,10) > 3:
-			directions = [get_smell_at(correct_position(ghost.pos+dir,scene.size)) for dir in Input.direction_keys.values()]
+			directions = [
+				get_smell_at(correct_position(ghost.pos+dir,scene.size))
+				for dir in Input.direction_keys.values()
+			]
 			directions = list(filter(lambda x: x is not None, directions))
 			direction = sorted(directions, key=lambda x: x.smell, reverse=ghosts_scared==0)[0]
-			ghost.move(direction.pos - ghost.pos)
+			ghost.pos = direction.pos
 
 gametime = 0
 game_over = False

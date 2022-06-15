@@ -1,17 +1,18 @@
-from gemini import Scene, Entity, sleep, main_scene
+from gemini import Scene, Entity, sleep, Camera
 
 scene = Scene((50,12), is_main_scene=True)
-block0 = Entity((0,0),(4,2))
-block1 = Entity((0,2),(4,2))
-block2 = Entity((0,4),(4,2))
-block3 = Entity((0,6),(4,2))
-block4 = Entity((0,8),(4,2))
+block0 = Entity((0,0), (4,2))
+block1 = Entity((0,2), (4,2))
+block2 = Entity((0,4), (4,2))
+block3 = Entity((0,6), (4,2))
+block4 = Entity((0,8), (4,2))
 block5 = Entity((0,10),(4,2))
+camera = Camera((0,0), (6,10), block2)
 
 i = 0
 while True:
 	i += 1
-	scene.render(show_coord_numbers=True)
+	camera.render(show_coord_numbers=True)
 	sleep(.1)
 	block0.move(1,0)
 	if i % 2 == 0:
