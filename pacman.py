@@ -1,4 +1,4 @@
-from gemini import Scene, Entity, Sprite, AnimatedSprite, Input, txtcolours as tc, sleep, correct_position
+from gemini import Scene, Entity, Sprite, AnimatedSprite, Input, txtcolours as tc, sleep
 import random
 
 USE_POWERUPS = False
@@ -112,7 +112,7 @@ def move_ghosts():
 			ghost.colour = ghost_colours[i]
 		if random.randint(0,10) > 3:
 			directions = [
-				get_smell_at(correct_position(ghost.pos+dir,scene.size))
+				get_smell_at((ghost.pos+dir) % scene.size)
 				for dir in Input.direction_keys.values()
 			]
 			directions = list(filter(lambda x: x is not None, directions))

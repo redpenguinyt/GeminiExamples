@@ -107,6 +107,9 @@ def scene3():
 
 			for text in texts:
 				if text.pos == (0,0):
+					if len(text.image) == 0:
+						texts.remove(text)
+						text.parent = None
 					text.image = text.image[1:]
 				else:
 					text.move((-1,0), collide=False)

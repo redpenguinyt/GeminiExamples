@@ -1,48 +1,59 @@
 from gemini import Scene, Sprite, txtcolours as tc, Input, Vec2D
 
-# Player plays King
-# against King and Queen
+DIRECTIONS = [Vec2D(-1,-1),Vec2D(0,-1),Vec2D(-1,0),Vec2D(1,0),Vec2D(0,1),Vec2D(1,1),Vec2D(1,-1),Vec2D(-1,1)]
+
+dots: list[Sprite] = []
+def clear_dots():
+	global dots
+	for d in dots:
+		d.parent = None
+	dots = []
+
+# Player plays King and Queen
+# against King
 nl = '\n'
 board = Scene((10,10), is_main_scene=True)
+board.use_separator = False
 walls = Sprite((0,0), image=f"""█{'█'*8}█
 {f'█{" "*8}█{nl}'*8}█{'█'*8}█""", layer=5)
 
-player_king = Sprite((5,5), "K", collisions=[5])
-player_king.range = 1
+player_king = Sprite((5,5), "K", colour=tc.GREEN, collisions=[5])
+player_king.type = "king"
+player_queen = Sprite((6,3), "Q", colour=tc.GREEN, collisions=[5])
+player_queen.type = "queen"
+whites = [player_king, player_queen]
 
-enemy_king = Sprite((4,6), "K", colour=tc.RED)
-enemy_king.range = 2
-enemy_queen = Sprite((6,3), "Q", colour=tc.RED)
-enemy_queen.range = -1
-enemies = [enemy_king, enemy_queen]
+enemy_king = Sprite((4,3), "K", colour=tc.PURPLE, collisions=[5])
+enemy_king.type = "king"
+blacks = [enemy_king]
 
-def is_hit(pos, checking_for_white):
-	for piece in enemies if checking_for_white else [player_king]:
-		print(f"checking for {piece}")
-		for d in [(1,0),(-1,0),(0,1),(0,-1),(1,1),(1,-1),(-1,1),(-1,-1)]:
-			print(f"Trying {d}")
-			i = 0
-			while i < piece.range or piece.range == -1:
-				i += 1
-				direction_change = [j*i for j in d]
-				resulting_pos = piece.pos + direction_change
-				print(direction_change)
-				print(resulting_pos)
-				if walls in board.get_entities_at(resulting_pos, [5]):
-					print("hit a wall")
-					break
-				if pos == resulting_pos:
-					return True
+def get_directions(piece):
+	global dots
+	results = []
+	for d in DIRECTIONS:
+		for i in range(1,9 if piece.type == "queen" else 2):
+			if board.is_entity_at(piece.pos + d * i, [5]):
+				break
+			results.append(piece.pos + d * i)
 
-is_hit((3,3), True)
+	return results
+
+def possible_postions(moving_piece, enemies):
+	global dots
+	for piece in enemies:
+		for pos in get_directions(piece):
+			dots.append(Sprite(pos, ".", colour=tc.RED, layer=5))
+
+	results = get_directions(moving_piece)
+	clear_dots()
+	return list(results)
 
 while True:
-	board.render()
-	user_direction = input("Which way to go (UDLR): ")
-	direction = Vec2D(0,0)
-	for k, d in zip("UDLR", Input.direction_keys.values()):
-		print("aaaaa: ",k,d)
-		if k in user_direction.upper():
-			direction += d
-	if is_hit(player_king.pos + direction, True):
-		player_king.move(direction)
+	board.render(show_coord_numbers=True)
+	user_piece = [player_king,player_queen][int(input("0: king, 1: queen "))]
+	user_chosen_pos = None
+	options = possible_postions(user_piece, blacks)
+	print(options)
+	while user_chosen_pos not in options:
+		user_chosen_pos = Vec2D(input("Which coords do you wish to go to? (1-8,1-8)").split(","))
+	user_piece.pos = user_chosen_pos
